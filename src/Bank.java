@@ -6,10 +6,13 @@ public class Bank {
 	public Bank() {
 		accounts = new ArrayList<Account>();
 	}
-
-	public void loadAccounts() {
-		accounts.add(new Account(1234, 6789, 80));
-		accounts.add(new Account(6789, 4321, 60));
+	
+	public boolean addAccount(Account account) {
+		for(int i = 0; i < accounts.size(); i++) {
+			if(account.getAccountNumber() == accounts.get(i).getAccountNumber()) return false;
+		}
+		
+		return accounts.add(account);
 	}
 
 	public Account findAccount(Card c) {

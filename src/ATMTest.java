@@ -4,55 +4,131 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ATMTest {
+	Bank bank;
+	ATM atm;
 	
 	@Before
 	public void beforeTest() {
-		ATM atm;
-		atm = new ATM();
-		Account a;
-		a = new Account();
-		Bank b;
-		b = new Bank();
-		
+		bank = new Bank();
+		bank.addAccount(new Account(1234, 6789, 80));
+		bank.addAccount(new Account(6789, 4321, 60));
+		atm = new ATM(bank);
 	}
 	@Test
-	public void test1() {
-		assertTrue(b.validate(1234), 6789);
-		assertEquals(b.balance(1234), 80);
-		b.withdrawal(1234, 20);
-		assertEquals(b-.balance(1234), 60);
+	public void testAccount1() {
+		Card c = new Card(1234);
+		assertEquals(c.getNumber(), 1234);
+		Account a = bank.findAccount(c);
+		assertEquals(a.getAccountNumber(), 1234);
+		assertTrue(bank.validate(a, 6789));
+	}
+	@Test
+	public void testAccount2(){
+		Card c = new Card(6789);
+		assertEquals(c.getNumber(), 6789);
+		Account a = bank.findAccount(c);
+		assertEquals(a.getAccountNumber(), 6789);
+		assertTrue(bank.validate(a, 4321));
+	}
+	@Test
+	public void testWithdrawal() {
+		Card c = new Card(1234);
+		assertEquals(c.getNumber(), 1234);
+		Account a = bank.findAccount(c);
+		assertEquals(a.getAccountNumber(), 1234);
+		assertTrue(bank.validate(a, 6789));
+		
+		assertEquals(a.getBalance(), 80);
+		
+		a.withdraw(20);
+		assertEquals(a.getBalance(), 60);
+		
+		a.withdraw(-20);
+		assertEquals(a.getBalance(), 60);
+		
+		a.withdraw(60);
+		assertEquals(a.getBalance(), 0);
+		
+		a.withdraw(20);
+		assertEquals(a.getBalance(), 0);
+	}
+	@Test
+	public void testDeposit() {
+		Card c = new Card(1234);
+		assertEquals(c.getNumber(), 1234);
+		Account a = bank.findAccount(c);
+		assertEquals(a.getAccountNumber(), 1234);
+		assertTrue(bank.validate(a, 6789));
+		
+		assertEquals(a.getBalance(), 80);
+		
+		a.deposit(20);
+		assertEquals(a.getBalance(), 100);
+		
+		a.deposit(-20);
+		assertEquals(a.getBalance(), 100);
+	}
+	@Test
+	public void testDepositAndWithdraw() {
+		Card c = new Card(1234);
+		assertEquals(c.getNumber(), 1234);
+		Account a = bank.findAccount(c);
+		assertEquals(a.getAccountNumber(), 1234);
+		assertTrue(bank.validate(a, 6789));
+		
+		assertEquals(a.getBalance(), 80);
+		
+		a.deposit(20);
+		assertEquals(a.getBalance(), 100);
+		
+		a.withdraw(50);
+		assertEquals(a.getBalance(), 50);
+	}
+	@Test
+	public void test1(){
+		Card c = new Card(1234);
+		assertEquals(c.getNumber(), 1234);
+		Account a = bank.findAccount(c);
+		assertEquals(a.getAccountNumber(), 1234);
+		assertTrue(bank.validate(a, 6789));
+		
+		assertEquals(a.getBalance(), 80);
+		
+		a.withdraw(20);
+		assertEquals(a.getBalance(), 60);
 	}
 	@Test
 	public void test2(){
-		assertTrue(b.validate(1234), 6789);
-		assertEquals(b.balance(1234), 80);
-		b.withdrawal(1234, 80);
-		assertEquals(b.balance(1234), 0);
+		Card c = new Card(1234);
+		assertEquals(c.getNumber(), 1234);
+		Account a = bank.findAccount(c);
+		assertEquals(a.getAccountNumber(), 1234);
+		assertTrue(bank.validate(a, 6789));
+		
+		assertEquals(a.getBalance(), 80);
+		
+		a.withdraw(80);
+		assertEquals(a.getBalance(), 0);
 	}
 	@Test
 	public void test3(){
-		assertFalse(b.validate(6789), 4321);
+		Card c = new Card(6789);
+		assertEquals(c.getNumber(), 6789);
+		Account a = bank.findAccount(c);
+		assertEquals(a.getAccountNumber(), 6789);
+		assertFalse(bank.validate(a, 1234));
 	}
 	@Test
 	public void test4(){
-		assertTrue(b.validate(6789), 4321);
-		assertEquals(b.balance(6789), 60);
-		b.deposit(6789, 20);
-		assertEquals(b.balance(6789), 80);
+		Card c = new Card(6789);
+		assertEquals(c.getNumber(), 6789);
+		Account a = bank.findAccount(c);
+		assertEquals(a.getAccountNumber(), 6789);
+		assertTrue(bank.validate(a, 4321));
+		
+		assertEquals(a.getBalance(), 60);
+		
+		a.deposit(20);
+		assertEquals(a.getBalance(), 80);
 	}
-	/*public void testDepositAndWithdraw() {
-		a = new BankAccount("Bill Gates");
-		boolean success = a.deposit(-100); // Nope!
-		assertFalse(success);
-		success = a.deposit(100); // OK
-		assertTrue(success);
-		double b = a.getBalance(); // should be 100
-		assertTrue(b == 100);
-		success = a.withdraw(200); // Nope!
-		assertFalse(success);
-		success = a.withdraw(75);
-		assertTrue(success);
-		b = a.getBalance();
-		assertTrue(b == 25);
-	}*/
 }
