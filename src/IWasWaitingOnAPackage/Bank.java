@@ -9,7 +9,7 @@ public class Bank {
 		loadInitialData();
 	}
 
-	private loadInitialData(){
+	private void loadInitialData(){
 		addAccount(new Account(1234, 6789, 80));
 		addAccount(new Account(6789, 4321, 60));
 	}
@@ -24,7 +24,7 @@ public class Bank {
 
 	public Account findAccount(int accountNumber) {
 		for (int i = 0; i < accounts.size(); i++) {
-			if (accounts.get(i).getAccountNumber() == accountNumber)) {
+			if (accounts.get(i).getAccountNumber() == accountNumber) {
 				return accounts.get(i);
 			}
 		}

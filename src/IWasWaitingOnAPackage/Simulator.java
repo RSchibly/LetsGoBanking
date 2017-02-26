@@ -20,19 +20,23 @@ public class Simulator {
 				scan = new Scanner(System.in);
 			}
 		}
+		
+		Display display = new CommandLineDisplay();
+		Printer printer = new Printer();
+		CardReader cardReader = new CardReader();
+		CashDispensor cashDispensor = new CashDispensor();
 
-		ATM controller = new ATM(this);
-
+		ATM controller = new ATM(display, printer, cardReader, cashDispensor);
+		controller.start();
+		
 		// Main event loop
-		while (controller.isRunning()) {
-
-
+		while (controller.isRunning() && scan.hasNextLine()) {
 			int id = 0;
-
-			System.out.println("Please enter a command: ");
-			ActionEvent cmd = new ActionEvent(scan, id, scan.nextLine());
+			String cmd = scan.nextLine();
+			System.out.println(cmd);
+			ActionEvent cmdAction = new ActionEvent(scan, id, cmd);
 			id++;
-			controller.actionPerformed(cmd);
+			controller.actionPerformed(cmdAction);
 		}
 
 	}

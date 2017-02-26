@@ -1,6 +1,8 @@
 package IWasWaitingOnAPackage;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class ATM implements ActionListener{
 	//Waiting for cardread
@@ -47,14 +49,13 @@ public class ATM implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		if(e.getActionCommand().startsWith("CARDREAD")){
 			//CARDREAD <num>
 			String[] cmdArgs = e.getActionCommand().split(" ");
 			if(cmdArgs.length < 2) {
 				cmd_error("Incorrect number of arguments in command \""+e.getActionCommand()+"\"");
 				return;
-
+			}
 			try{
 				cardread(Integer.parseInt(cmdArgs[1]));
 			}
@@ -69,7 +70,7 @@ public class ATM implements ActionListener{
 			if(cmdArgs.length < 2) {
 				cmd_error("Incorrect number of arguments in command \""+e.getActionCommand()+"\"");
 				return;
-
+			}
 			try{
 				num(Integer.parseInt(cmdArgs[1]));
 			}
@@ -115,7 +116,7 @@ public class ATM implements ActionListener{
 		}
 		m_cardReader.readCard(num);
 		m_account = m_bank.findAccount(m_cardReader.getAccountNumber());
-		m_display.display("Enter PIN")
+		m_display.display("Enter PIN");
 		m_state = ATMstate.WPIN;
 	}
 
@@ -125,12 +126,11 @@ public class ATM implements ActionListener{
 			return;
 		}
 		else if (m_state == ATMstate.WPIN){
-			if(m_bank.validate(account, num)){
+			if(m_bank.validate(m_account, num)){
 				m_display.display("Choose Transaction");
 				m_state = ATMstate.WCOMMAND;
 			}
 			else {
-				cmd_error("Invalid PIN.");
 				m_display.display("Invalid PIN, please re-enter PIN or press Cancel");
 			}
 		}
@@ -144,13 +144,21 @@ public class ATM implements ActionListener{
 			//This is where we try to withdraw the amount and dispense
 			if(m_account.withdraw(num)){
 				//Success
+				m_display.display("Dispensing $"+num);
 				m_cashDispensor.dispense(num);
+				
+				//TODO Actually format my own date and time string
 				m_transactions.add(LocalDateTime.now().toString()+" withdrawal "+ num);
+				m_display.display("Choose Transaction");
+				m_state = ATMstate.WCOMMAND;
 			}
 			else {
 				//Failed
 				m_display.display("Failed to withdraw the amount entered");
+				//TODO Actually format my own date and time string
 				m_transactions.add(LocalDateTime.now().toString()+" withdrawal 0");
+				m_display.display("Choose Transaction");
+				m_state = ATMstate.WCOMMAND;
 			}
 		}
 	}
@@ -162,7 +170,7 @@ public class ATM implements ActionListener{
 
 	private void button_cb(){
 		//This is where we will just display the balance
-		m_display.display(String(m_account.getBalance()));
+		m_display.display("Your balance is $" + m_account.getBalance());
 		m_transactions.add(LocalDateTime.now().toString()+" check balance");
 	}
 
