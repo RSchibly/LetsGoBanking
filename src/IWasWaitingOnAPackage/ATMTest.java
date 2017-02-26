@@ -7,13 +7,11 @@ import org.junit.Test;
 public class ATMTest {
 	Bank bank;
 	ATM atm;
-	
+
 	@Before
 	public void beforeTest() {
 		bank = new Bank();
-		bank.addAccount(new Account(1234, 6789, 80));
-		bank.addAccount(new Account(6789, 4321, 60));
-		atm = new ATM(bank);
+		atm = new ATM();
 	}
 	@Test
 	public void testAccount1() {
@@ -38,18 +36,18 @@ public class ATMTest {
 		Account a = bank.findAccount(c);
 		assertEquals(a.getAccountNumber(), 1234);
 		assertTrue(bank.validate(a, 6789));
-		
+
 		assertEquals(a.getBalance(), 80);
-		
+
 		a.withdraw(20);
 		assertEquals(a.getBalance(), 60);
-		
+
 		a.withdraw(-20);
 		assertEquals(a.getBalance(), 60);
-		
+
 		a.withdraw(60);
 		assertEquals(a.getBalance(), 0);
-		
+
 		a.withdraw(20);
 		assertEquals(a.getBalance(), 0);
 	}
@@ -60,12 +58,12 @@ public class ATMTest {
 		Account a = bank.findAccount(c);
 		assertEquals(a.getAccountNumber(), 1234);
 		assertTrue(bank.validate(a, 6789));
-		
+
 		assertEquals(a.getBalance(), 80);
-		
+
 		a.deposit(20);
 		assertEquals(a.getBalance(), 100);
-		
+
 		a.deposit(-20);
 		assertEquals(a.getBalance(), 100);
 	}
@@ -76,12 +74,12 @@ public class ATMTest {
 		Account a = bank.findAccount(c);
 		assertEquals(a.getAccountNumber(), 1234);
 		assertTrue(bank.validate(a, 6789));
-		
+
 		assertEquals(a.getBalance(), 80);
-		
+
 		a.deposit(20);
 		assertEquals(a.getBalance(), 100);
-		
+
 		a.withdraw(50);
 		assertEquals(a.getBalance(), 50);
 	}
@@ -92,9 +90,9 @@ public class ATMTest {
 		Account a = bank.findAccount(c);
 		assertEquals(a.getAccountNumber(), 1234);
 		assertTrue(bank.validate(a, 6789));
-		
+
 		assertEquals(a.getBalance(), 80);
-		
+
 		a.withdraw(20);
 		assertEquals(a.getBalance(), 60);
 	}
@@ -105,9 +103,9 @@ public class ATMTest {
 		Account a = bank.findAccount(c);
 		assertEquals(a.getAccountNumber(), 1234);
 		assertTrue(bank.validate(a, 6789));
-		
+
 		assertEquals(a.getBalance(), 80);
-		
+
 		a.withdraw(80);
 		assertEquals(a.getBalance(), 0);
 	}
@@ -126,9 +124,9 @@ public class ATMTest {
 		Account a = bank.findAccount(c);
 		assertEquals(a.getAccountNumber(), 6789);
 		assertTrue(bank.validate(a, 4321));
-		
+
 		assertEquals(a.getBalance(), 60);
-		
+
 		a.deposit(20);
 		assertEquals(a.getBalance(), 80);
 	}

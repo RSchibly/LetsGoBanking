@@ -5,31 +5,31 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class Simulator {
-	public enum Button {W, CB, CANCEL};
-	
+
 	public static void main(String[] args) throws InterruptedException {
-		boolean isFile = false;
 		String fileFile = "transactions.txt";
-		Scanner scan;
-		
-		try {
-			scan = new Scanner(new File(fileFile));
-			isFile = true;
-		} catch (FileNotFoundException e) {
-			scan = new Scanner(System.in);
+		Scanner scan = new Scanner (System.in);
+		System.out.println("Are you entering a file for this simulation? (Y/N)");
+		String resp = scan.nextLine();
+
+		if(resp.toLowerCase().charAt(0) == 'y'){
+			try {
+				scan = new Scanner(new File(fileFile));
+			} catch (FileNotFoundException e) {
+				System.err.println("File Not Found");
+				scan = new Scanner(System.in);
+			}
 		}
-		ChronoController controller = new ChronoController();
+
+		ATM controller = new ATM(this);
 
 		// Main event loop
-
 		while (controller.isRunning()) {
 
+
 			int id = 0;
-			if (isFile) {
-				// TODO Parse time stamp if(isFile)
-			} else {
-				System.out.println("Please enter a command: ");
-			}
+
+			System.out.println("Please enter a command: ");
 			ActionEvent cmd = new ActionEvent(scan, id, scan.nextLine());
 			id++;
 			controller.actionPerformed(cmd);
