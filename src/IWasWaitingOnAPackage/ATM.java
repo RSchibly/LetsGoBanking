@@ -1,8 +1,11 @@
 package IWasWaitingOnAPackage;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.LocalDateTime;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class ATM implements ActionListener{
 	//Waiting for cardread
@@ -21,6 +24,8 @@ public class ATM implements ActionListener{
 	private ATMstate m_state;
 	private ArrayList<String> m_transactions;
 	private boolean running;
+	private DateFormat df;
+	
 
 	public ATM(Display display, Printer printer, CardReader cardReader, CashDispensor cashDispensor) {
 		this.m_display = display;
@@ -32,6 +37,7 @@ public class ATM implements ActionListener{
 		this.m_account = null;
 		this.m_transactions = new ArrayList<String>();
 		running = false;
+		df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 	}
 
 	public void start(){
@@ -91,13 +97,6 @@ public class ATM implements ActionListener{
 			//BUTTON CANCEL
 			button_cancel();
 		}
-		else if(e.getActionCommand().startsWith("SALT")){
-			//TODO Remove this whole thing since we are turning it in and both the professor and TA will see this.
-			System.out.println("A LONG LONG TIME AGO, IN A FAR OFF PLACE, RICK ONCE SAID, \"I LOVE ACTION LISTENERS\", " +
-			" OUR T.A. WALKED AWAY CHEEZING. PIPEEEEEEEEE-DADDY");
-			//To be more accurate, I pretty much said "HAVE YOU EVEN HEARD OF ACTION LISTENERS" to which he replied something about this not being a GUI
-			//Apparently he thinks you can't use ActionListener's outside of a GUI which is just sad and wrong.
-		}
 		else {
 			//Error: Unknown command
 			cmd_error("Unknown command \""+e.getActionCommand()+"\"");
@@ -147,16 +146,21 @@ public class ATM implements ActionListener{
 				m_display.display("Dispensing $"+num);
 				m_cashDispensor.dispense(num);
 				
-				//TODO Actually format my own date and time string
-				m_transactions.add(LocalDateTime.now().toString()+" withdrawal "+ num);
+				//LocalDate
+				Date today = (Date) Calendar.getInstance().getTime();
+				String date = df.format(today);
+				// Print date
+				m_transactions.add(date +" withdrawal "+ num);
 				m_display.display("Choose Transaction");
 				m_state = ATMstate.WCOMMAND;
 			}
 			else {
 				//Failed
 				m_display.display("Failed to withdraw the amount entered");
-				//TODO Actually format my own date and time string
-				m_transactions.add(LocalDateTime.now().toString()+" withdrawal 0");
+				Date today = (Date) Calendar.getInstance().getTime();
+				String date = df.format(today);
+				// Print date
+				m_transactions.add(date +" withdrawal 0");
 				m_display.display("Choose Transaction");
 				m_state = ATMstate.WCOMMAND;
 			}
@@ -171,7 +175,11 @@ public class ATM implements ActionListener{
 	private void button_cb(){
 		//This is where we will just display the balance
 		m_display.display("Your balance is $" + m_account.getBalance());
-		m_transactions.add(LocalDateTime.now().toString()+" check balance");
+		//get date
+		Date today = (Date) Calendar.getInstance().getTime();
+		String date = df.format(today);
+		// Print date
+		m_transactions.add(date +" check balance");
 	}
 
 	private void button_cancel(){
