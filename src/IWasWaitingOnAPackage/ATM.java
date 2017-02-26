@@ -147,6 +147,7 @@ public class ATM implements ActionListener{
 				m_display.display("Dispensing $"+num);
 				m_cashDispensor.dispense(num);
 				
+				//LocalDateTime?
 				//TODO Actually format my own date and time string
 				m_transactions.add(LocalDateTime.now().toString()+" withdrawal "+ num);
 				m_display.display("Choose Transaction");
