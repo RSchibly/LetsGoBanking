@@ -9,7 +9,7 @@ public class Simulator {
 	public static void main(String[] args) throws InterruptedException {
 		String fileFile = "transactions.txt";
 		Scanner scan = new Scanner (System.in);
-		System.out.println("Are you entering a file for this simulation? (Y/N)");
+		System.out.print("Are you entering a file for this simulation? (Y/N)");
 		String resp = scan.nextLine();
 
 		if(resp.toLowerCase().charAt(0) == 'y'){
@@ -34,6 +34,7 @@ public class Simulator {
 			int id = 0;
 			String cmd = scan.nextLine();
 			System.out.println(cmd);
+			System.out.println();
 			ActionEvent cmdAction = new ActionEvent(scan, id, cmd);
 			id++;
 			controller.actionPerformed(cmdAction);

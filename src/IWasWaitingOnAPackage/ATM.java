@@ -1,7 +1,7 @@
 package IWasWaitingOnAPackage;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
+import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -42,6 +42,7 @@ public class ATM implements ActionListener{
 
 	public void start(){
 		running = true;
+		System.out.println();
 		m_display.display("Please enter a card.");
 	}
 
@@ -126,7 +127,7 @@ public class ATM implements ActionListener{
 		}
 		else if (m_state == ATMstate.WPIN){
 			if(m_bank.validate(m_account, num)){
-				m_display.display("Choose Transaction");
+				m_display.display("Choose Transaction: ");
 				m_state = ATMstate.WCOMMAND;
 			}
 			else {
@@ -151,7 +152,7 @@ public class ATM implements ActionListener{
 				String date = df.format(today);
 				// Print date
 				m_transactions.add(date +" withdrawal "+ num);
-				m_display.display("Choose Transaction");
+				m_display.display("Choose Transaction: ");
 				m_state = ATMstate.WCOMMAND;
 			}
 			else {
@@ -161,7 +162,7 @@ public class ATM implements ActionListener{
 				String date = df.format(today);
 				// Print date
 				m_transactions.add(date +" withdrawal 0");
-				m_display.display("Choose Transaction");
+				m_display.display("Choose Transaction: ");
 				m_state = ATMstate.WCOMMAND;
 			}
 		}
@@ -198,6 +199,7 @@ public class ATM implements ActionListener{
 			//Print receipt and reset to initial state
 			m_display.display("Printing Receipt:");
 			for(int i=0; i<m_transactions.size(); i++) m_printer.print(m_transactions.get(i));
+			System.out.println("-------------------------------------");
 			m_display.display("Please enter a card");
 			m_state = ATMstate.IDLE;
 			m_account = null;
